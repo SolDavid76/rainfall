@@ -1,0 +1,3 @@
+We disas the program with gdb and we saw there is a call to atoi then a cmp $0x1a7, %eax 
+We convert 1a7 in 423 and we launch ./level0 423
+Finally we have a shell with level1
