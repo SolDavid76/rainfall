@@ -1,0 +1,18 @@
+Starting the executable, it seems to get an entry from the terminal.
+We try differents inputs and the code seg Fault with Long inputs. (ex: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+To get more clues, we open it in GDB. We try the string 
+	which cause the segfault at address: 0x41414141
+
+Trying again to find an unused function, there is none.
+After some research on the web, we found a new solution: the shellcode
+
+We try to put our shellcode in an env variable and then write its address in EIP register.
+Unfortunately, it didn't work, because there is a protection of the EIP address which can't start with 0xb*******
+
+Next, we used ltrace to get the address of the "strdup()" return buffer located on the heap so it starts with 0x08******
+
+This time, it worked.
+
+(python -c "print('\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80' + 'A'*52 + '\x08\xa0\x04\x08')"; cat) | ./level2
+
+Finally we have a shell with level3

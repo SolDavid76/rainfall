@@ -18,5 +18,5 @@ void v(void)
 
 void main(void)
 {
-	p();
+	v();
 }

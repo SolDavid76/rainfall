@@ -1,0 +1,15 @@
+Starting the executable, it seems to get an entry from the terminal.
+It doesn't seem to crash with differents strings.
+We disassemble the executable and this time it reads the entry using "fgets()"
+which isn't easily  exploitable. It also calls "printf()" and searching on internet
+we found that printf is exploitable if used unproperly.
+
+On this website (https://axcheron.github.io/exploit-101-format-strings/), 
+	we even found exactly how we could exploit the breach in our case :
+		Overwritting a stack variable.
+
+After some tries, we succeeded.
+
+(python -c "print '\x8c\x98\x04\x08' + 'A'*41 + '%x%x%x%n'"; cat) | ./level3
+
+Finally we have a shell with level4

