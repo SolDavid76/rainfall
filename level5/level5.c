@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   level2.c                                           :+:      :+:    :+:   */
+/*   level5.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djanusz & qcherel                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,26 +11,25 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <string.h>
 
-void p()
+int m;
+
+void o(void)
 {
-	unsigned int test;
-	char buf[64];
-
-	fflush(stdout);
-	gets(buf);
-	test = __builtin_return_address(0); 
-	if ((test & 0xb0000000) == 0xb0000000)
-	{
-		printf("(%p)\n", (void *)test);
-		_exit(1);
-	}
-	puts(buf);
-	strdup(buf);
+	system("/bin/sh");
+	_exit(1);
 }
 
-int main()
+void n(void)
 {
-	p();
+	char buf[512];
+
+	fgets(buf, 512, stdin);
+	printf(buf);
+	exit(1);
+}
+
+void main(void)
+{
+	n();
 }

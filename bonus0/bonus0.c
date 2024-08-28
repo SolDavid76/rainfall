@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   level2.c                                           :+:      :+:    :+:   */
+/*   bonus0.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djanusz & qcherel                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,26 +11,36 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include <unistd.h>
 #include <string.h>
 
-void p()
+void p(char *str, char *buf)
 {
-	unsigned int test;
-	char buf[64];
-
-	fflush(stdout);
-	gets(buf);
-	test = __builtin_return_address(0); 
-	if ((test & 0xb0000000) == 0xb0000000)
-	{
-		printf("(%p)\n", (void *)test);
-		_exit(1);
-	}
-	puts(buf);
-	strdup(buf);
+	char readbuf[4096];
+	puts(" - ");
+	read(0, readbuf, 4096);
+	*(strchr(readbuf, '\n')) = 0;
+	strncpy(buf, readbuf, 20);
 }
 
-int main()
+void pp(char *buf)
 {
-	p();
+	char buf1[20];
+	char buf2[20];
+	p(" - ", buf2);
+	p(" - ", buf1);
+	strcpy(buf, buf1);
+	int len = strlen(buf);
+
+	buf[len] = (unsigned short *)" ";
+	buf[len + 1] = 0;
+	strcat(buf, buf2); 
+}
+
+int main(int ac, char **av, char **envp)
+{
+	char buf[64];
+	pp(buf);
+	puts(buf);
+	return(0);
 }

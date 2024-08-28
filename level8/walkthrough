@@ -1,0 +1,26 @@
+Starting the executable './level8', we get two '(nil)' so probably the printf of some addresses
+then get back the stdin interface.
+
+After some random strings of multiple size, nothing seems to happen so we send the program in gdb.
+
+Inside it, we saw a very long main and no other functions or global variables, but there is a call 'system("/bin/sh")'
+so we probably have to give some password to get there.
+
+We also found multiple strings compare after the input request: "auth ", "service", "login", "reset".
+We tried then and we managed to get:
+- 'auth ' : malloc the first pointer.
+- 'service' : malloc the second pointer.
+- 'reset' : free the last pointer.
+- 'login' : probably the last cmd to get the shell.
+
+Also using multiple 'auth ' or 'service' raises the addresses of the mallocs.
+We tried some combinations, and stumbled on a success:  
+
+`auth `
+`service`
+`service`
+`login`
+
+After trying to verify it, we understood that login checks if the 'auth ' address is 32 bits before than the 'service' address.
+
+Finally we have a shell with level9

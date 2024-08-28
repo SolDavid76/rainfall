@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   level2.c                                           :+:      :+:    :+:   */
+/*   level7.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djanusz & qcherel                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,27 +10,27 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <string.h>
+#include <stdio.h>
+#include <time.h>
 
-void p()
+char c[40];
+
+void m() 
 {
-	unsigned int test;
-	char buf[64];
-
-	fflush(stdout);
-	gets(buf);
-	test = __builtin_return_address(0); 
-	if ((test & 0xb0000000) == 0xb0000000)
-	{
-		printf("(%p)\n", (void *)test);
-		_exit(1);
-	}
-	puts(buf);
-	strdup(buf);
+	time_t tloc;
+	time(&tloc);
+	printf("%s -%d\n", c, tloc);
 }
 
-int main()
+int main(int ac, char **av) 
 {
-	p();
+	char *a = malloc(8);
+	char *b = malloc(8);
+	char *c = malloc(8);
+	char *d = malloc(8);
+	strcpy(b, av[1]);
+	strcpy(d, av[2]);
+	fgets(c, 80, fopen("/home/user/level8/.pass", "r"));
+	puts("~~");
 }

@@ -1,0 +1,22 @@
+Starting the lvl : './level7' results in a crash, we try to give it arguments and with 1 it still crashes 
+but with 2 the program return normally  and print '~~'
+
+Let's look inside it a little : 'ltrace ./level7 aaaaa bbbb' 
+
+We can see that there is multiples (4) malloc(8) then the program tries to copy (using strcpy) the first arg to the second
+malloc address the the second argument to fourth malloc.
+
+So we can try to overflow the first strcpy to change the destination of the second strcpy. 
+Searching what to write as the second argument, we found an unused function 'm' that uses time then printf with
+'%s - %d\n' so it writes a string then the timestamp.
+
+The program also 'fopen' and 'fgets' the flag before the function 'puts' so the flag is stored in the global variable 'c' (ex: 0x08049960) before 'puts' so if we call 'm' there, the string '%s'
+would be the flag.
+
+First, lets try to go inside this function (using GOT overwrite): we get the address of a LIBC function in this case 'puts' (ex: 0x08049928) and the address of 'm' (0x080484f4)
+											- we put any chars until it fills all the others allocs ('A' * 20 ) then we write the 'puts' address'
+											- the address of 'm' as second argument  
+
+./level7 `python -c 'print "A"*20 + "\x28\x99\x04\x08"'` `python -c 'print "\xf4\x84\x04\x08"'`
+
+Finally we have the flag to level8

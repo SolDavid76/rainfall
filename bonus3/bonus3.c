@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   level2.c                                           :+:      :+:    :+:   */
+/*   bonus3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djanusz & qcherel                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,26 +11,34 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
-void p()
+int main(int argc, char *argv[])
 {
-	unsigned int test;
-	char buf[64];
+    FILE *file;
+    char buffer[66];
+    char buffer2[66];
+    int pos;
 
-	fflush(stdout);
-	gets(buf);
-	test = __builtin_return_address(0); 
-	if ((test & 0xb0000000) == 0xb0000000)
-	{
-		printf("(%p)\n", (void *)test);
-		_exit(1);
-	}
-	puts(buf);
-	strdup(buf);
-}
+    file = fopen("/home/user/end/.pass", "r");
+    if (!file || argc != 2)
+        return -1;
 
-int main()
-{
-	p();
+    fread(buffer, 1, 66, file);
+    buffer[65] = '\0';
+
+    pos = atoi(argv[1]);
+    buffer[pos] = '\0';
+
+    fread(buffer2, 1, 66, file);
+    fclose(file);
+
+    if (strcmp(buffer, argv[1]) == 0)
+        execl("/bin/sh", "sh", NULL);
+    else
+        puts(buffer2);
+
+    return 0;
 }

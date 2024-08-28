@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   level2.c                                           :+:      :+:    :+:   */
+/*   level6.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djanusz & qcherel                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,27 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <string.h>
+#include <stdio.h>
 
-void p()
+void m(void)
 {
-	unsigned int test;
-	char buf[64];
-
-	fflush(stdout);
-	gets(buf);
-	test = __builtin_return_address(0); 
-	if ((test & 0xb0000000) == 0xb0000000)
-	{
-		printf("(%p)\n", (void *)test);
-		_exit(1);
-	}
-	puts(buf);
-	strdup(buf);
+	puts("Nope");
 }
 
-int main()
+void n(void)
 {
-	p();
+	system("/bin/sh");
+}
+
+
+void main(int ac, char **av)
+{
+	char *buf = malloc(64);
+	void (*ptr)(void) = (void (*)(void))malloc(4);
+
+	ptr = &m;
+
+	strcpy(buf, av[1]);
+
+	(*ptr)();
+
 }

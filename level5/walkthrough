@@ -1,0 +1,28 @@
+Firstly, we try to start the executable 'level5', it seems to take an input and then print it to STDOUT
+After using ltrace, we see that it still uses 'fgets' and 'printf' to do so.
+
+So we guessed that the solution will be to use a 'format string attack' again.
+
+But this time, while the var 'm' is still present, there is no check to its value in the code. We will
+have to find another way in.
+
+Later, we found that there is an unused function 'o', so we might do just like in 'level1' and redirect the
+execution flow to this function.
+
+To do so, we used a 'GOT Overwrite' explained in the same tutorial on string attack as before.
+
+We find the address of the 'exit' and 'o' function:
+	objdump -R level5 | grep exit 
+		(ex: 0x08049838)
+	objdump -t level5 | grep o
+		(ex: 0x080484a4)
+
+and we will write the address of 'o' at the address of 'exit'
+
+for example:
+
+(python -c 'print("\x38\x98\x04\x08%134513824x%4$n")'; cat) | ./level5
+
+just wait a bit (^_^)
+
+Finally we have a shell with level6

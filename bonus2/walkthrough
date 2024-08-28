@@ -1,1 +1,16 @@
+First of all, we execute the program and we receive 'Hello `arg1`' if we provide 2 arguments but nothing if we provide less or more args
+
+With 'ltrace', we see that the program gets the 'LANG' env variable and that it does exactly the same as we expected with our firsts tests,
+except 2 memcmp which are probably where we will find some clues.
+
+In gdb, we found that the memcmp are the 'LANG' being compared to 'fi' (finnish) and 'nl' (dutch).
+
+we tried changing the lang: lANG=nl and we found that we can overflow the buffers with it and rewrite EIP.
+(Probably because the greeting is longer in dutch than 'hello ' and the final buffer is 76 chars long)
+
+we have to fill the first strncpy with 40 chars and the second with 23 chars then the 4 next bits will be our address
+
+Lets re-use our shellcode in an env variable and try: 
+
+example:
 ./bonus2 `python -c 'print "A" * 40'` `python -c 'print "B" * 23 + "\x77\xfe\xff\xbf"'`

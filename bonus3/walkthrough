@@ -1,3 +1,9 @@
-./bonus3 ""
+Firstly lets try the given executable, we tried with different arguments and saw that it prints '\n' in stdout if we provide 
+exactly 1 argument.
+
+Eventually we tried :
+	./bonus3 ""
+
+Surprisingly enough, we managed to solve the level like this.
 
 Congratulations graduate!

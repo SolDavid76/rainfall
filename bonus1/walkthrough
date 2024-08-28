@@ -1,1 +1,26 @@
+Testing './bonus1', we saw that we need to give an argument to the executable otherwise it crashes but the
+program doesn't seems to print anything in stdout.
+
+Using 'ltrace', we saw that in reality, it needs 2 arguments : 
+		- the first one passed in 'atoi' so it's a number
+		- the second one is passed in memcpy depending on the first one (len = first * 4).
+
+We also found that the number cannot be bigger than '9'
+
+In gdb, we found that there is an string comparison to 0x574f4c46 which is the ascii of "FLOW"
+Starting At the 41st bit of the stack. 
+
+But we cannot because our max 'memcpy' lenght is 36 chars (9 * 4) so we thought of giving a negative 
+number to the atoi (which is lower than '10') and the '* 4'  operation will overflow it to a positive
+value.
+
+so we need to have the number which times 4 is equal to unsigned max int + 44:
+
+We found that this is -1073741813.
+
+So lets verify with 'ltrace', we get 44 as a size for memcpy, it works perfectly.
+Lets write 'FLOW' to the correct place:
+
 ./bonus1 -1073741813 `python -c 'print "FLOW" * 11'`
+
+Finally we have a shell with bonus2

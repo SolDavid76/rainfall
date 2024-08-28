@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   level2.c                                           :+:      :+:    :+:   */
+/*   level8.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djanusz & qcherel                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,25 +12,28 @@
 
 #include <stdio.h>
 #include <string.h>
-
-void p()
-{
-	unsigned int test;
-	char buf[64];
-
-	fflush(stdout);
-	gets(buf);
-	test = __builtin_return_address(0); 
-	if ((test & 0xb0000000) == 0xb0000000)
-	{
-		printf("(%p)\n", (void *)test);
-		_exit(1);
-	}
-	puts(buf);
-	strdup(buf);
-}
+#include <unistd.h>
 
 int main()
 {
-	p();
+	void *ptr1 = NULL;
+	void *ptr2 = NULL;
+	char  buf[128];
+
+	while(1) {
+		fgets(buf, 128, stdin);
+		prinft("%p, %p \n", ptr1, ptr2);
+		if (buf == "auth ")
+			ptr1 = malloc(4);
+		else if (buf == "service")
+			ptr2 = strdup(buf + 7);
+		else if (buf == "reset")
+			if (ptr1 < ptr2)
+				free(ptr2);
+			else
+				free(ptr1);
+		else if (buf == "login")
+			if (ptr1 + 32 == ptr2)
+				system("/bin/sh");
+	}
 }

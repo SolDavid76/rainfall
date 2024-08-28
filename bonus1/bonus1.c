@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   level2.c                                           :+:      :+:    :+:   */
+/*   bonus1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djanusz & qcherel                          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,26 +11,24 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
-void p()
+int main(int ac, char **av)
 {
-	unsigned int test;
-	char buf[64];
+    int num = atoi(av[1]);
+    if (num > 9) {
+        return 1;
+    }
 
-	fflush(stdout);
-	gets(buf);
-	test = __builtin_return_address(0); 
-	if ((test & 0xb0000000) == 0xb0000000)
+    char buffer[40];
+    memcpy(buffer, av[2], num * 4);
+
+    if (num == 0x574f4c46)
 	{
-		printf("(%p)\n", (void *)test);
-		_exit(1);
-	}
-	puts(buf);
-	strdup(buf);
-}
+        execl("/bin/echo", "echo", "Success!", NULL);
+    }
 
-int main()
-{
-	p();
+    return 0;
 }

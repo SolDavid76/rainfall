@@ -1,0 +1,10 @@
+After looking at the executable, it seems to be the same exploit as in level3
+but with VERY big number in the variable. Unfortunately we can't write that many 
+characters in the buffer to simply use the printf flag %n.
+
+So after looking at the same page as before we found that 'printf format flags' 
+can help us in this case.
+
+(python -c "print '\x10\x98\x04\x08' + '%16930052x' + '%x'*10 + '%n'") | ./level4
+
+Finally we have a shell with level5
